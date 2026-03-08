@@ -6,3 +6,4 @@ PyJWT
 pandas
 openpyxl
 gunicorn
+joblib
