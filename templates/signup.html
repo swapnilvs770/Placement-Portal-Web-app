@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - GCE Karad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #990000;
+            --accent-color: #FFCC00;
+            --text-color: #333333;
+            --light-bg: #f5f5f5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --transition-duration: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e9e9e9 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .signup-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-top: 4px solid var(--primary-color);
+            transition: transform var(--transition-duration);
+        }
+
+        .signup-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .signup-header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all var(--transition-duration);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-rating {
+            width: 100px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition-duration);
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px var(--shadow-color);
+        }
+
+        .signup-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .signup-footer p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .signup-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-duration);
+        }
+
+        .signup-footer a:hover {
+            color: var(--secondary-color);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-container {
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container animated">
+        <div class="signup-header">
+            <h1>Create Account</h1>
+            <p>Join GCE Karad's Placement Portal</p>
+        </div>
+
+        <div class="alert alert-success" id="successAlert"></div>
+        <div class="alert alert-error" id="errorAlert"></div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" class="form-control" placeholder="Enter first name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" placeholder="Enter last name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter college email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rollNumber">Roll Number</label>
+                    <input type="text" id="rollNumber" class="form-control" placeholder="Enter roll number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" class="form-control" required>
+                        <option value="">Select department</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="ENTC">Electronics & Telecommunication</option>
+                        <option value="MECH">Mechanical Engineering</option>
+                        <option value="CIVIL">Civil Engineering</option>
+                        <option value="ELECTRICAL">Electrical Engineering</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cgpa">CGPA</label>
+                    <input type="number" id="cgpa" class="form-control" placeholder="Enter CGPA" step="0.01" min="0" max="10" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="batchYear">Batch Year</label>
+                    <select id="batchYear" class="form-control" required>
+                        <option value="">Select batch year</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Skills (Rate yourself from 1 to 5)</label>
+                    <div class="skills-container">
+                        <div class="skill-item">
+                            <label>Programming</label>
+                            <input type="range" class="skill-rating" min="1" max="5" value="3">
+                        </div>
+                        <div class="skill-item">
+                            <label>Web Development</label>
+                            <input type="range" class="skill-rating" min="1" max="5" value="3">
+                        </div>
+                        <div class="skill-item">
+                            <label>Database</label>
+                            <input type="range" class="skill-rating" min="1" max="5" value="3">
+                        </div>
+                        <div class="skill-item">
+                            <label>Communication</label>
+                            <input type="range" class="skill-rating" min="1" max="5" value="3">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Create password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="achievements">Achievements</label>
+                    <textarea id="achievements" class="form-control" rows="3" placeholder="List your achievements"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+
+        <div class="signup-footer">
+            <p>Already have an account? <a href="login.html">Sign In</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Form submission
+        async function handleSignup(event) {
+            event.preventDefault();
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+
+            // Get all form values
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                rollNumber: document.getElementById('rollNumber').value,
+                department: document.getElementById('department').value,
+                cgpa: document.getElementById('cgpa').value,
+                batchYear: document.getElementById('batchYear').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                achievements: document.getElementById('achievements').value,
+                skills: {}
+            };
+
+            // Get skill ratings
+            document.querySelectorAll('.skill-item').forEach(item => {
+                const skillName = item.querySelector('label').textContent;
+                const rating = item.querySelector('.skill-rating').value;
+                formData.skills[skillName] = parseInt(rating);
+            });
+
+            try {
+                // Password validation
+                if (formData.password !== formData.confirmPassword) {
+                    throw new Error('Passwords do not match');
+                }
+
+                // Email validation for college domain
+                if (!formData.email.endsWith('@gcekarad.ac.in')) {
+                    throw new Error('Please use your college email address');
+                }
+
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    successAlert.style.display = 'block';
+                    successAlert.textContent = 'Registration successful! Please check your email for verification.';
+                    errorAlert.style.display = 'none';
+
+                    // Redirect to login page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                } else {
+                    throw new Error(data.message || 'Registration failed');
+                }
+            } catch (error) {
+                errorAlert.style.display = 'block';
+                errorAlert.textContent = error.message;
+                successAlert.style.display = 'none';
+            }
+        }
+
+        // Form field focus effect
+        const formControls = document.querySelectorAll('.form-control');
+        
+        formControls.forEach(control => {
+            control.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            control.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Skill rating display
+        const skillRatings = document.querySelectorAll('.skill-rating');
+        
+        skillRatings.forEach(rating => {
+            rating.addEventListener('input', function() {
+                const value = this.value;
+                this.style.background = `linear-gradient(to right, var(--primary-color) ${value * 20}%, #ddd ${value * 20}%)`;
+            });
+            
+            // Initialize background
+            rating.dispatchEvent(new Event('input'));
+        });
+
+        // Magnetic effect for button
+        const btn = document.querySelector('.btn');
+        
+        btn.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const deltaX = (x - centerX) / 8;
+            const deltaY = (y - centerY) / 8;
+            
+            this.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translate(0, 0)';
+        });
+    </script>
+</body>
+</html> 

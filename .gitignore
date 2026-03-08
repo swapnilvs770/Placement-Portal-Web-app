@@ -1,0 +1,20 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+
+
+# VS Code
+.vscode/
+
+# ML Models
+*.pkl
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPO Placement Portal - Home</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary-blue: #357ABD;
+            --light-blue: #EAF2FA;
+            --primary-white: #FFFFFF;
+            --background-grey: #F8F9FA;
+            --primary-text: #212529;
+            --secondary-text: #6C757D;
+            --success-green: #28A745;
+            --warning-red: #DC3545;
+            --border-color: #E9ECEF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-grey);
+            color: var(--primary-text);
+            line-height: 1.6;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--primary-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-text);
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-blue);
+        }
+        
+        .nav-actions .btn-secondary {
+            margin-right: 12px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 96px 0;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-text);
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--secondary-text);
+            max-width: 700px;
+            margin: 0 auto 32px;
+        }
+
+        /* Core Components */
+        .card {
+            background-color: var(--primary-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 32px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.07);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: var(--primary-white);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2c6cb0;
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-white);
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-blue);
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            margin-bottom: 80px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background-color: var(--primary-white);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .stat-item-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+        }
+        
+        .stat-item-info h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-text);
+        }
+        
+        .stat-item-info p {
+            font-size: 14px;
+            color: var(--secondary-text);
+        }
+
+        /* Upcoming Placements Section */
+        .placements-section {
+            padding-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-text);
+            margin-bottom: 8px;
+        }
+        
+        .section-header p {
+            font-size: 16px;
+            color: var(--secondary-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .placement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .placement-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-text);
+            margin-bottom: 16px;
+        }
+        
+        .placement-card ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        
+        .placement-card li {
+            color: var(--secondary-text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .placement-card li i {
+            color: var(--primary-blue);
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-text);
+            color: #A0AEC0;
+            padding: 64px 0;
+            margin-top: 40px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+        }
+        
+        .footer-about h4, .footer-links h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-white);
+            margin-bottom: 16px;
+        }
+        
+        .footer-about p {
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            text-decoration: none;
+            color: #A0AEC0;
+            font-size: 14px;
+            transition: color 0.2s ease-in-out;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-white);
+        }
+        
+        .footer-bottom {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid #4A5568;
+            text-align: center;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="nav-logo">
+                    <i data-lucide="shield"></i>
+                    <span class="nav-logo-text">TPO GCEK</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#" class="active">Home</a>
+                  
+                    <a href="{{url_for('about_tpo')}}">About</a>
+                </div>
+                <div class="nav-actions">
+                    <!-- CHANGE: Both buttons now point to the unified login route -->
+                   
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Portal</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Your Gateway to a Successful Career</h1>
+            <p>The official Training & Placement portal of GCE Karad. Access resources, track applications, and connect with top-tier companies seamlessly.</p>
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Get Started</a>
+        </section>
+
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-item-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="stat-item-info">
+                        <h3>328+</h3>
+                        <p>Total Offers</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-item-icon">
+                        <i data-lucide="building-2"></i>
+                    </div>
+                    <div class="stat-item-info">
+                        <h3>86+</h3>
+                        <p>Companies Visited</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-item-icon">
+                        <i data-lucide="trending-up"></i>
+                    </div>
+                    <div class="stat-item-info">
+                        <h3>85%</h3>
+                        <p>Placement Rate</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-item-icon">
+                        <i data-lucide="indian-rupee"></i>
+                    </div>
+                    <div class="stat-item-info">
+                        <h3>12.5 LPA</h3>
+                        <p>Average Package</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="placements-section">
+            <div class="section-header">
+                <h2>Upcoming Placement Drives</h2>
+                <p>Stay updated with the latest recruitment drives from leading companies across various sectors.</p>
+            </div>
+            <div class="placement-grid">
+                <div class="card placement-card">
+                    <h3>Tech Giants</h3>
+                    <ul>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Google - Software Engineer</li>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Microsoft - Full Stack Developer</li>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Amazon - Cloud Architect</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">View Details</a>
+                </div>
+                <div class="card placement-card">
+                    <h3>Finance & Banking</h3>
+                    <ul>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Goldman Sachs - Analyst</li>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>JP Morgan - Tech Associate</li>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Deutsche Bank - Tech Analyst</li>
+                    </ul>
+                     <a href="#" class="btn btn-secondary">View Details</a>
+                </div>
+                <div class="card placement-card">
+                    <h3>Core Engineering</h3>
+                    <ul>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Larsen & Toubro - GET</li>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Tata Motors - Graduate Engineer</li>
+                        <li><i data-lucide="check-circle" class="w-4 h-4"></i>Siemens - R&D Engineer</li>
+                    </ul>
+                     <a href="#" class="btn btn-secondary">View Details</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <h4>TPO GCE Karad</h4>
+                    <p>Facilitating the transition from academia to the professional world for the bright minds of GCEK.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About TPO</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Portals</h4>
+                    <ul>
+                        <!-- CHANGE: All links now point to the unified login route -->
+                        <li><a href="{{ url_for('login') }}">Student Login</a></li>
+                        <li><a href="{{ url_for('login') }}">Admin Login</a></li>
+                        <li><a href="{{ url_for('login') }}">HOD Login</a></li>
+                    </ul>
+                </div>
+                 <div class="footer-links">
+                    <h4>Follow Us</h4>
+                    <ul>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Training & Placement Office, GCE Karad. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Student Filter{% endblock %}
+
+{% block content %}
+<div class="flex pt-[4.5rem]">
+  <main class="flex-1 md:ml-[0px] p-6">
+    <!-- Student Filter Section -->
+    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Filter Students</h2>
+        <div class="flex space-x-3">
+          <button id="toggleSkills" class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+            <i data-lucide="eye-off" class="w-4 h-4 mr-2"></i>
+            <span>Hide Skills</span>
+          </button>
+          <form method="POST" action="/download-students-excel">
+            <button type="submit" class="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+              <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+              Download Excel
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <form method="POST" class="mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+            <select name="year" class="w-full border border-gray-300 rounded-md p-2 focus:ring-primary focus:border-primary">
+              <option value="">Any</option>
+              <option value="1">1st Sem</option>
+              <option value="2">2nd Sem</option>
+              <option value="3">3rd Sem</option>
+              <option value="4">4th Sem</option>
+              <option value="5">5th Sem</option>
+              <option value="6">6th Sem</option>
+              <option value="7">7th Sem</option>
+              <option value="8">8th Sem</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Branch</label>
+            <select name="branch" class="w-full border border-gray-300 rounded-md p-2 focus:ring-primary focus:border-primary">
+              <option value="">Any</option>
+              <option value="IT">IT</option>
+              <option value="ENTC">ENTC</option>
+              <option value="ELECTRICAL">ELECTRICAL</option>
+              <option value="MECHANICAL">MECHANICAL</option>
+              <option value="CIVIL">CIVIL</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Skills</label>
+            <select name="skills" class="w-full border border-gray-300 rounded-md p-2 focus:ring-primary focus:border-primary">
+              <option value="">Any</option>
+              <option value="Python">Python</option>
+              <option value="Java">Java</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="C++">C++</option>
+              <option value="SQL">SQL</option>
+              <option value="React">React</option>
+              <option value="Machine Learning">Machine Learning</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select name="status" class="w-full border border-gray-300 rounded-md p-2 focus:ring-primary focus:border-primary">
+              <option value="">Any</option>
+              <option value="placed">Placed</option>
+              <option value="unplaced">Unplaced</option>
+              <option value="open_to_work">Open to Work</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Min CGPA</label>
+            <input type="number" step="0.01" min="0" max="10" name="min_cgpa" class="w-full border border-gray-300 rounded-md p-2 focus:ring-primary focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Max CGPA</label>
+            <input type="number" step="0.01" min="0" max="10" name="max_cgpa" class="w-full border border-gray-300 rounded-md p-2 focus:ring-primary focus:border-primary">
+          </div>
+        </div>
+        <div class="flex justify-end mt-4 space-x-3">
+          <button type="reset" class="px-6 py-2 bg-gray-100 text-gray-700 rounded-md font-medium hover:bg-gray-200 transition-colors">Reset</button>
+          <button type="submit" class="px-6 py-2 bg-primary text-white rounded-md font-semibold hover:bg-blue-700 transition-colors">Apply Filters</button>
+        </div>
+      </form>
+
+      <div class="overflow-x-auto">
+        <h3 class="text-lg font-semibold mb-3">Student List</h3>
+        <table class="w-full border border-gray-300 rounded-lg overflow-hidden">
+          <thead class="bg-blue-100 text-gray-700">
+            <tr>
+              <th class="p-3 text-left">Name</th>
+              <th class="p-3 text-left">Roll Number</th>
+              <th class="p-3 text-left">Semester</th>
+              <th class="p-3 text-left">Branch</th>
+              <th class="p-3 text-left">CGPA</th>
+              <th class="p-3 text-left skills-column">Skills</th>
+              <th class="p-3 text-left">Status</th>
+              <th class="p-3 text-left">Actions</th>
+            </tr>
+          </thead>
+         
+          <tbody class="divide-y divide-gray-200">
+            {% for student in students %}
+            <tr class="hover:bg-blue-50 transition">
+              <td class="p-3">{{student.Student_Name}}</td>
+              <td class="p-3">{{student.UserID}}</td>
+              <td class="p-3">{{student.Year}}</td>
+              <td class="p-3">{{student.Branch}}</td>
+              <td class="p-3">{{student.CGPA}}</td>
+              <td class="p-3 skills-column">
+                <div class="flex flex-wrap gap-1">
+                  {% if student.Skills %}
+                  {% for skill in student.Skills.split(',') %}
+                    <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">{{ skill }}</span>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+              </td>
+              <td class="p-3">
+                {% if student.Status == 'placed' %}
+                  <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Placed</span>
+                {% elif student.Status == 'unplaced' %}
+                  <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Unplaced</span>
+                {% else %}
+                  <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Open to Work</span>
+                {% endif %}
+              </td>
+              <td class="p-3">
+                <div class="flex space-x-2">
+                  <a href="/student/{{student.UserID}}" class="text-primary hover:text-blue-700 transition-colors">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </a>
+                  <a href="/download-resume/{{student.UserID}}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="flex justify-between items-center mt-4 px-3">
+          <div class="text-sm text-gray-500">Showing {{ students|length }} of {{ total_students }} entries</div>
+          <div class="flex space-x-1">
+            {% if page > 1 %}
+              <a href="?page={{ page-1 }}" class="px-3 py-1 border rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">Previous</a>
+            {% endif %}
+            {% for p in range(1, total_pages+1) %}
+              <a href="?page={{ p }}" class="px-3 py-1 border rounded-md {% if p == page %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %} transition-colors">
+                {{ p }}
+              </a>
+            {% endfor %}
+            {% if page < total_pages %}
+              <a href="?page={{ page+1 }}" class="px-3 py-1 border rounded-md hover:bg-gray-100 transition-colors">Next</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Initialize Lucide icons
+  document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+    
+    // Toggle Skills Column
+    const toggleSkillsBtn = document.getElementById('toggleSkills');
+    let skillsVisible = true;
+    
+    toggleSkillsBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      skillsVisible = !skillsVisible;
+      
+      // Toggle all skills columns
+      document.querySelectorAll('.skills-column').forEach(col => {
+        col.style.display = skillsVisible ? '' : 'none';
+      });
+      
+      // Update button icon and text
+      const icon = toggleSkillsBtn.querySelector('i');
+      const textSpan = toggleSkillsBtn.querySelector('span');
+      if (skillsVisible) {
+        icon.setAttribute('data-lucide', 'eye-off');
+        textSpan.textContent = ' Hide Skills';
+      } else {
+        icon.setAttribute('data-lucide', 'eye');
+        textSpan.textContent = ' Show Skills';
+      }
+      lucide.createIcons(); // Refresh icons
+    });
+  });
+</script>
+{% endblock %}

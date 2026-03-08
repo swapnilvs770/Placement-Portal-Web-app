@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6 text-primary">Welcome to the Dashboard</h1>
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-500">Total Students</p>
+        <h3 class="text-2xl font-bold">{{ students|length }}</h3>
+      </div>
+      <div class="p-3 rounded-full bg-blue-100 text-primary">
+        <i data-lucide="users" class="w-6 h-6"></i>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="flex items-center text-green-500 text-sm">
+        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+        <span>--------------</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-500">Placements</p>
+        <h3 class="text-2xl font-bold">{{total_placed_student.total_placed_student}}</h3>
+      </div>
+      <div class="p-3 rounded-full bg-green-100 text-green-600">
+        <i data-lucide="briefcase" class="w-6 h-6"></i>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="flex items-center text-green-500 text-sm">
+        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+        <span>8% from last month</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-500">Companies</p>
+        <h3 class="text-2xl font-bold">{{no_company}}</h3>
+      </div>
+      <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+        <i data-lucide="building" class="w-6 h-6"></i>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="flex items-center text-green-500 text-sm">
+        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+        <span>3 new this month</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-500">Avg. Package</p>
+        <h3 class="text-2xl font-bold">{{avg_package}}</h3>
+      </div>
+      <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+        <i data-lucide="indian-rupee" class="w-6 h-6"></i>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="flex items-center text-green-500 text-sm">
+        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+        <span>5% increase</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <!-- Placement Progress Chart -->
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Placement Progress</h3>
+      <!-- <div class="flex space-x-2">
+        <button class="px-3 py-1 text-xs bg-blue-100 text-primary rounded-lg">2024</button>
+        <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded-lg">2023</button>
+      </div> -->
+    </div>
+    <div class="h-64">  
+      <canvas id="progressChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Branch-wise Distribution -->
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Branch-wise Distribution</h3>
+      <!-- <div class="flex space-x-2">
+        <button class="px-3 py-1 text-xs bg-blue-100 text-primary rounded-lg">Students</button>
+        <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded-lg">Placements</button>
+      </div> -->
+    </div>
+    <div class="h-64">
+      <canvas id="branchChart"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Recent Activity -->
+<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-8">
+  <h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
+  <div class="space-y-4">
+    {% for ann in announcement %}
+    <div class="flex items-start">
+      <div class="p-2 bg-blue-100 rounded-full mr-4">
+        <i data-lucide="bell" class="w-5 h-5 text-primary"></i>
+      </div>
+      
+      <div class="flex-1">
+        <!-- <p class="font-medium">New company registered</p> -->
+        <p class="font-medium">{{ann.message}}</p>
+        <!-- <p class="text-sm text-gray-500"></p> -->
+        <p class="text-xs text-gray-400 mt-1 time-stamp" data-time="{{ ann.created_at }}"></p>
+     
+      </div>
+     
+      <button class="text-gray-400 hover:text-gray-600">
+        <i data-lucide="more-vertical" class="w-5 h-5"></i>
+      </button>
+    </div>
+    {% endfor %}
+
+    <!-- <div class="flex items-start">
+      <div class="p-2 bg-green-100 rounded-full mr-4">
+        <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+      </div>
+      <div class="flex-1">
+        <p class="font-medium">Placement results updated</p>
+        <p class="text-sm text-gray-500">25 students placed in Amazon with average package of ₹18 LPA</p>
+        <p class="text-xs text-gray-400 mt-1">1 day ago</p>
+      </div>
+      <button class="text-gray-400 hover:text-gray-600">
+        <i data-lucide="more-vertical" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div class="flex items-start">
+      <div class="p-2 bg-purple-100 rounded-full mr-4">
+        <i data-lucide="calendar" class="w-5 h-5 text-purple-600"></i>
+      </div>
+      <div class="flex-1">
+        <p class="font-medium">Upcoming drive</p>
+        <p class="text-sm text-gray-500">Microsoft drive scheduled for 25th Oct 2024 at Seminar Hall</p>
+        <p class="text-xs text-gray-400 mt-1">2 days ago</p>
+      </div>
+      <button class="text-gray-400 hover:text-gray-600">
+        <i data-lucide="more-vertical" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </div>
+</div> -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Charts
+  // Placement Progress Chart
+  // Dynamic placement data
+const placementData = {{ monthly_data | tojson }};
+
+// Initialize an array with 12 zeros
+const monthlyPlacements = Array(12).fill(0);
+
+// Fill the monthlyPlacements array based on placementData
+placementData.forEach(item => {
+  const monthIndex = parseInt(item.placement_month.split('-')[1], 10) - 1;
+  monthlyPlacements[monthIndex] = item.placed_students_count;
+});
+
+// Now create cumulative sum (progress)
+for (let i = 1; i < 12; i++) {
+  monthlyPlacements[i] += monthlyPlacements[i - 1];
+}
+
+// Chart.js config
+const progressCtx = document.getElementById('progressChart').getContext('2d');
+
+const progressChart = new Chart(progressCtx, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    datasets: [{
+      label: 'Placements',
+      data: monthlyPlacements, // <- using cumulative dynamic data here
+      borderColor: '#2563eb',
+      backgroundColor: 'rgba(37, 99, 235, 0.1)',
+      borderWidth: 2,
+      tension: 0.3,
+      fill: true,
+      pointBackgroundColor: '#2563eb',
+      pointRadius: 4,
+      pointHoverRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: '#1f2937',
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 12
+        },
+        padding: 10,
+        cornerRadius: 6,
+        displayColors: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        },
+        ticks: {
+          stepSize: 50
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+});
+
+
+  // Branch-wise Distribution Chart
+  
+
+  // Your fixed labels
+  const placedData = {{ placed_data | tojson }};
+  const branchMapping = {
+  'EE': 'ELECTRICAL',
+  'IT': 'IT',
+  'En&TC': 'EN&TC', // If your DB uses 'ENTC' or 'EnTC', match exactly
+  'ME': 'MECHANICAL',
+  'Civil': 'CIVIL'
+};
+
+const labels = ['EE', 'IT', 'En&TC', 'ME', 'Civil'];
+
+const dataCounts = labels.map(label => {
+  const branchNameInDB = branchMapping[label] || label; // get DB name
+  const branchData = placedData.find(item => item.Branch === branchNameInDB);
+  return branchData ? branchData.placed_students_count : 0;})
+
+  const branchCtx = document.getElementById('branchChart').getContext('2d');
+
+  const branchChart = new Chart(branchCtx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Students',
+        data: dataCounts,
+        backgroundColor: [
+          'rgba(37, 99, 235, 0.7)',
+          'rgba(16, 185, 129, 0.7)',
+          'rgba(139, 92, 246, 0.7)',
+          'rgba(234, 179, 8, 0.7)',
+          'rgba(239, 68, 68, 0.7)'
+        ],
+        borderColor: [
+          'rgba(37, 99, 235, 1)',
+          'rgba(16, 185, 129, 1)',
+          'rgba(139, 92, 246, 1)',
+          'rgba(234, 179, 8, 1)',
+          'rgba(239, 68, 68, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: '#1f2937',
+          titleFont: {
+            size: 14
+          },
+          bodyFont: {
+            size: 12
+          },
+          padding: 10,
+          cornerRadius: 6
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+
+
+  document.querySelectorAll('.time-stamp').forEach(el => {
+    const time = new Date(el.dataset.time);
+    const now = new Date();
+    const seconds = Math.floor((now - time) / 1000);
+
+    let display;
+    if (seconds < 60) {
+      display = `${seconds} seconds ago`;
+    } else if (seconds < 3600) {
+      display = `${Math.floor(seconds / 60)} minutes ago`;
+    } else if (seconds < 86400) {
+      display = `${Math.floor(seconds / 3600)} hours ago`;
+    } else {
+      display = `${Math.floor(seconds / 86400)} days ago`;
+    }
+
+    el.innerText = display;
+  });
+</script>
+{% endblock %}

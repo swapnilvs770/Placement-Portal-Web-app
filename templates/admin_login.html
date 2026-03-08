@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPO Portal Login</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Global Design System Variables */
+        :root {
+            --primary-blue: #357ABD;
+            --light-blue: #EAF2FA;
+            --primary-white: #FFFFFF;
+            --background-grey: #F8F9FA;
+            --primary-text: #212529;
+            --secondary-text: #6C757D;
+            --border-color: #E9ECEF;
+            --danger-text: #DC3545;
+            --danger-bg: #FEE2E2;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-grey);
+            color: var(--primary-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            line-height: 1.2;
+        }
+        .header-subtitle {
+            font-size: 16px;
+            color: var(--secondary-text);
+        }
+
+        /* Card Component */
+        .card {
+            background-color: var(--primary-white);
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Role Selector */
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .role-btn {
+            padding: 12px;
+            background-color: transparent;
+            border: none;
+            color: var(--secondary-text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .role-btn:not(:last-child) {
+            border-right: 1px solid var(--border-color);
+        }
+
+        .role-btn.active {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        /* Flash Message for Errors */
+        .flash-message {
+            margin-bottom: 16px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary-text);
+            margin-bottom: 8px;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+        }
+        .form-input {
+            width: 100%;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+            padding: 12px 16px 12px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(53, 122, 189, 0.2);
+        }
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+        }
+        .form-link {
+            font-size: 14px;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+        .form-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Button Component */
+        .btn {
+            width: 100%;
+            background-color: var(--primary-blue);
+            color: var(--primary-white);
+            font-weight: 600;
+            font-size: 16px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .btn:hover {
+            background-color: #2c6cb0;
+            transform: scale(1.02);
+        }
+
+        /* Footer Text */
+        .footer-text {
+            text-align: center;
+            color: var(--secondary-text);
+            font-size: 14px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-logo">
+                <i data-lucide="shield" style="width: 32px; height: 32px; color: var(--primary-blue);"></i>
+                <span class="header-title">TPO Portal</span>
+            </div>
+            <p class="header-subtitle">Welcome back. Please log in to your account.</p>
+        </div>
+
+        <div class="card">
+            <form method="POST" action="/admin-login" id="loginForm">
+                <input type="hidden" name="role" id="roleInput" value="student">
+                
+                <div class="role-selector">
+                    <button type="button" class="role-btn" data-role="tpo">TPO</button>
+                    <button type="button" class="role-btn" data-role="hod">HOD</button>
+                </div>
+            
+                <!-- Example of an error message -->
+                <!-- <div class="flash-message">
+                    Invalid username or password.
+                </div> -->
+
+                <div class="form-group">
+                    <label for="username" class="form-label" id="usernameLabel">Student ID</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="user" class="input-icon" style="width: 20px; height: 20px;"></i>
+                        <input type="text" id="username" name="User" required class="form-input" placeholder="Enter your Student ID">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock" class="input-icon" style="width: 20px; height: 20px;"></i>
+                        <input type="password" id="password" name="pass" required class="form-input" placeholder="Enter your password">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <a href="#" class="form-link">Forgot Password?</a>
+                </div>
+                <div>
+                    <button type="submit" class="btn">Log In</button>
+                </div>
+            </form>
+        </div>
+        <p class="footer-text">
+            &copy; 2025 TPO Office GCEK. All rights reserved.
+        </p>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleButtons = document.querySelectorAll('.role-btn');
+            const roleInput = document.getElementById('roleInput');
+            const usernameLabel = document.getElementById('usernameLabel');
+            const usernameInput = document.getElementById('username');
+
+            roleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button style
+                    roleButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const selectedRole = this.dataset.role;
+                    roleInput.value = selectedRole;
+                    
+                    // Update labels and placeholders
+                    if (selectedRole === 'hod') {
+                        usernameLabel.textContent = 'HOD Email';
+                        usernameInput.placeholder = 'Enter your official email';
+                    } else if (selectedRole === 'tpo') {
+                        usernameLabel.textContent = 'TPO Admin ID';
+                        usernameInput.placeholder = 'Enter your Admin ID';
+                    } else { // student
+                        usernameLabel.textContent = 'Student ID';
+                        usernameInput.placeholder = 'Enter your Student ID';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
