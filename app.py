@@ -1595,7 +1595,11 @@ def applicant_list():
             flash(f"An error occurred: {str(e)}", 'danger')
         finally:
             conn.close()
+<<<<<<< HEAD
         return redirect(url_for('applicant_list', page=page))
+=======
+            return redirect(url_for('applicant_list', page=page))
+>>>>>>> 4ca278b56528a4045797295a4c2c5bc5fc86939a
 
     # --- GET request handling to display the list ---
     try:
