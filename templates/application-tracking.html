@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Tracking - SAMU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #990000;
+            --accent-color: #FFCC00;
+            --text-color: #333333;
+            --light-bg: #f5f5f5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --transition-duration: 0.3s;
+            --perspective: 1000px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e9e9e9 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        nav {
+            background-color: var(--primary-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            padding: 0;
+        }
+
+        nav ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-duration);
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--accent-color);
+            transition: all var(--transition-duration);
+            transform: translateX(-50%);
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        nav ul li a:hover::after {
+            width: 60%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin: 0 auto 3rem;
+            padding: 3rem 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transform-style: preserve-3d;
+            transition: transform var(--transition-duration);
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--secondary-color);
+        }
+
+        .hero:hover {
+            transform: translateY(-5px);
+        }
+
+        .hero h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 1rem auto;
+            color: #666;
+        }
+
+        .application-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-top: 4px solid var(--primary-color);
+            transition: all var(--transition-duration);
+        }
+
+        .application-section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .application-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .application-section h2::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+            bottom: 0;
+            left: 0;
+        }
+
+        .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .application-card {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all var(--transition-duration);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow-color);
+            background: white;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .application-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .application-card ul {
+            list-style: none;
+        }
+
+        .application-card li {
+            margin-bottom: 0.8rem;
+            color: #666;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .application-card li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-in-progress {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            width: 50%;
+            padding-right: 2rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+            padding-right: 0;
+            padding-left: 2rem;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            right: auto;
+            left: -10px;
+        }
+
+        .timeline-date {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-duration);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem 0 1rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--accent-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .footer-section {
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: var(--accent-color);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .footer-section ul li a::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 20px;
+        }
+
+        .footer-section ul li a:hover::before {
+            left: 5px;
+        }
+
+        .footer-section ul li:not(a) {
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding-top: 70px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-section {
+                text-align: center;
+            }
+            
+            .footer-section h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .footer-section ul li a {
+                padding-left: 0;
+            }
+            
+            .footer-section ul li a::before {
+                display: none;
+            }
+            
+            .footer-section ul li a:hover {
+                padding-left: 0;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 50px;
+                padding-right: 0;
+                margin-left: 0;
+            }
+
+            .timeline-item:nth-child(even) {
+                margin-left: 0;
+                padding-left: 50px;
+            }
+
+            .timeline-content::before {
+                left: -10px;
+                right: auto;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animated {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="student-portal.html">Student Portal</a></li>
+            <li><a href="admin-portal.html">Admin Portal</a></li>
+            <li><a href="resource-portal.html">Resource Portal</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero animated">
+            <h1>Application Tracking</h1>
+            <p>Track the status of your applications, view application history, and manage your placement process.</p>
+        </div>
+
+        <div class="application-section animated delay-1">
+            <h2>Current Applications</h2>
+            <div class="application-grid">
+                <div class="application-card">
+                    <h3>Google - Software Engineer</h3>
+                    <ul>
+                        <li>Application ID: #12345</li>
+                        <li>Applied Date: March 15, 2024</li>
+                        <li>Last Updated: March 20, 2024</li>
+                        <li>Documents Submitted: Resume, Cover Letter</li>
+                    </ul>
+                    <span class="status-badge status-in-progress">In Progress</span>
+                </div>
+                <div class="application-card">
+                    <h3>Microsoft - Full Stack Developer</h3>
+                    <ul>
+                        <li>Application ID: #12346</li>
+                        <li>Applied Date: March 10, 2024</li>
+                        <li>Last Updated: March 18, 2024</li>
+                        <li>Documents Submitted: Resume, Portfolio</li>
+                    </ul>
+                    <span class="status-badge status-approved">Approved</span>
+                </div>
+                <div class="application-card">
+                    <h3>Amazon - Cloud Architect</h3>
+                    <ul>
+                        <li>Application ID: #12347</li>
+                        <li>Applied Date: March 5, 2024</li>
+                        <li>Last Updated: March 15, 2024</li>
+                        <li>Documents Submitted: Resume, Certifications</li>
+                    </ul>
+                    <span class="status-badge status-pending">Pending Review</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="application-section animated delay-2">
+            <h2>Application Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">March 20, 2024</div>
+                        <h3>Technical Interview Scheduled</h3>
+                        <p>Google - Software Engineer position</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">March 18, 2024</div>
+                        <h3>Application Approved</h3>
+                        <p>Microsoft - Full Stack Developer position</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">March 15, 2024</div>
+                        <h3>Application Submitted</h3>
+                        <p>Amazon - Cloud Architect position</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">March 10, 2024</div>
+                        <h3>Documents Verified</h3>
+                        <p>Microsoft - Full Stack Developer position</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="application-section animated delay-2">
+            <h2>Application History</h2>
+            <div class="application-grid">
+                <div class="application-card">
+                    <h3>Goldman Sachs - Analyst</h3>
+                    <ul>
+                        <li>Application ID: #12340</li>
+                        <li>Applied Date: February 15, 2024</li>
+                        <li>Status: Rejected</li>
+                        <li>Feedback: Technical skills need improvement</li>
+                    </ul>
+                    <span class="status-badge status-rejected">Rejected</span>
+                </div>
+                <div class="application-card">
+                    <h3>JP Morgan - Software Developer</h3>
+                    <ul>
+                        <li>Application ID: #12341</li>
+                        <li>Applied Date: February 10, 2024</li>
+                        <li>Status: Withdrawn</li>
+                        <li>Reason: Accepted another offer</li>
+                    </ul>
+                    <span class="status-badge status-rejected">Withdrawn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="student-portal.html">Student Portal</a></li>
+                        <li><a href="admin-portal.html">Admin Portal</a></li>
+                        <li><a href="resource-portal.html">Resource Portal</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>Email: info@samu.edu</li>
+                        <li>Phone: +91 99999999999</li>
+                        <li>Address: GCE Karad-Satara</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <ul>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© All Rights Reserved to the GCE Karad-Satara</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // GSAP Animations
+        gsap.from('.hero', {
+            duration: 1.5,
+            y: 100,
+            opacity: 0,
+            ease: 'power4.out',
+            delay: 0.5
+        });
+
+        gsap.from('.application-section', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'power3.out',
+            delay: 1
+        });
+
+        gsap.from('.timeline-item', {
+            duration: 1,
+            x: -50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'power3.out',
+            delay: 1.5
+        });
+    </script>
+</body>
+</html> 

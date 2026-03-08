@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Resume</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <style>
+        :root {
+            --primary-blue: #357ABD;
+            --light-blue: #EAF2FA;
+            --primary-white: #FFFFFF;
+            --background-grey: #F8F9FA;
+            --primary-text: #212529;
+            --secondary-text: #6C757D;
+            --border-color: #E9ECEF;
+            --success-green: #28A745;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-grey);
+            color: var(--primary-text);
+        }
+
+        h1, .h1 { font-size: 28px; font-weight: 600; }
+        h2, .h2 { font-size: 20px; font-weight: 500; }
+        .small, small { font-size: 14px; font-weight: 400; color: var(--secondary-text); }
+        
+        .sidebar {
+            width: 4.5rem;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--primary-white);
+            border-right: 1px solid var(--border-color);
+            z-index: 1050;
+        }
+        .sidebar .nav-link {
+            color: var(--secondary-text);
+            border-radius: 8px;
+            margin: 0.25rem;
+        }
+        .sidebar .nav-link:hover {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+        }
+        .sidebar .nav-link.active {
+            background-color: var(--primary-blue);
+            color: var(--primary-white);
+        }
+
+        .main-content {
+            margin-left: 4.5rem;
+            padding: 1.5rem;
+            width: calc(100% - 4.5rem);
+        }
+
+        .top-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .custom-card {
+            background-color: var(--primary-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .custom-card .card-header {
+            background-color: transparent;
+            border-color: var(--border-color);
+            padding: 1rem 1.5rem;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: var(--primary-white);
+        }
+        .btn-primary-custom:hover {
+            background-color: #2a6aaa;
+            border-color: #2a6aaa;
+        }
+        
+        /* Uploader specific styles */
+        .upload-area {
+            border: 2px dashed var(--primary-blue);
+            border-radius: 8px;
+            padding: 3rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-align: center;
+        }
+        .upload-area.dragover {
+            background-color: var(--light-blue);
+        }
+        .upload-area .bi {
+            font-size: 3rem;
+            color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <div class="sidebar d-flex flex-column flex-shrink-0 p-2">
+            <a href="{{ url_for('student_page') }}" class="d-block p-3 link-dark text-decoration-none" title="GCEK TPO" data-bs-toggle="tooltip" data-bs-placement="right">
+                <i class="bi bi-shield-check fs-3" style="color: var(--primary-blue);"></i>
+            </a>
+            <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+                <li class="nav-item"><a href="{{url_for('student_page')}}" class="nav-link py-3" title="Home" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi bi-house fs-4"></i></a></li>
+                <li class="nav-item"><a href="{{url_for('dashboard')}}" class="nav-link py-3" title="Announcements" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi bi-megaphone fs-4"></i></a></li>
+                <li class="nav-item"><a href="{{ url_for('company_suggestion', token=request.args.get('token')) }}" class="nav-link py-3" title="Company Suggestions" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi bi-lightbulb fs-4"></i></a></li>
+                <li class="nav-item"><a href="{{url_for('resource_portal')}}" class="nav-link py-3" title="Resources" data-bs-toggle="tooltip" data-bs-placement="right"><i class="bi bi-collection fs-4"></i></a></li>
+            </ul>
+            <div class="dropdown border-top mt-auto">
+                <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle fs-3"></i>
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+                    <li><a class="dropdown-item" href="{{ url_for('profile_management', token=request.args.get('token')) }}">My Profile</a></li>
+                    <li><a class="dropdown-item active" href="{{url_for('upload_resume')}}">Update Resume</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('password_reset') }}">Reset Password</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{url_for('logout')}}">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h1 class="h2 mb-0">Update Resume</h1>
+                <small>Upload your latest resume. This will replace any previously uploaded file.</small>
+            </header>
+
+            <div id="alert-placeholder"></div>
+
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="custom-card">
+                        <div class="card-header"><h2 class="h5 mb-0">Upload New Resume</h2></div>
+                        <div class="card-body p-4">
+                             <div class="upload-area mb-3" id="dropArea">
+                                <i class="bi bi-cloud-arrow-up-fill"></i>
+                                <p class="fw-bold mb-1 mt-2">Drag & drop your file here</p>
+                                <p class="small">or click to browse</p>
+                             </div>
+                             <input type="file" id="fileInput" accept=".pdf,.doc,.docx" class="d-none" />
+                             <div class="small text-center text-muted mb-3" id="fileName">No file selected</div>
+                             <div class="text-center">
+                                <button class="btn btn-primary-custom" onclick="uploadFile()">
+                                    <i class="bi bi-upload me-2"></i>Upload
+                                </button>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="custom-card">
+                        <div class="card-header"><h2 class="h5 mb-0">Current Resume</h2></div>
+                        <div class="card-body p-4 text-center">
+                            {% if resume_path %}
+                                <i class="bi bi-file-earmark-check-fill fs-1 text-success"></i>
+                                <p class="mt-3">A resume is on file.</p>
+                                <p class="small text-muted">Uploaded on server.</p>
+                                <a href="{{ url_for('static', filename=resume_path) }}" target="_blank" class="btn btn-outline-secondary">
+                                    <i class="bi bi-eye me-2"></i>View Current Resume
+                                </a>
+                            {% else %}
+                                <i class="bi bi-file-earmark-x-fill fs-1 text-danger"></i>
+                                <p class="mt-3">No resume found.</p>
+                                <p class="small text-muted">Please upload your resume using the panel on the left.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize Bootstrap tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+            // Uploader Logic
+            const dropArea = document.getElementById("dropArea");
+            const fileInput = document.getElementById("fileInput");
+            const fileNameDisplay = document.getElementById("fileName");
+
+            dropArea.addEventListener("click", () => fileInput.click());
+            fileInput.addEventListener("change", () => handleFile(fileInput.files[0]));
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            dropArea.addEventListener('dragenter', () => dropArea.classList.add('dragover'));
+            dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+            dropArea.addEventListener('drop', (e) => {
+                dropArea.classList.remove('dragover');
+                handleFile(e.dataTransfer.files[0]);
+            });
+
+            function handleFile(file) {
+                if (file) {
+                    fileInput.files = new DataTransfer().files; // Clear previous
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    fileInput.files = dt.files; // Set new file
+                    fileNameDisplay.textContent = `Selected: ${file.name}`;
+                } else {
+                    fileNameDisplay.textContent = "No file selected";
+                }
+            }
+        });
+
+        function uploadFile() {
+            const file = document.getElementById("fileInput").files[0];
+            const alertPlaceholder = document.getElementById('alert-placeholder');
+
+            const showAlert = (message, type) => {
+                const wrapper = document.createElement('div')
+                wrapper.innerHTML = [
+                    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                    `   <div>${message}</div>`,
+                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    '</div>'
+                ].join('');
+                alertPlaceholder.append(wrapper);
+            };
+
+            if (!file) {
+                showAlert("Please select a file first.", "warning");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("resume", file);
+
+            fetch("/upload_resume", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(({ status, body }) => {
+                if (status === 200) {
+                    showAlert('✅ ' + body.message, 'success');
+                    // Reload the page to show the updated "Current Resume" status
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showAlert('⚠️ ' + body.message, 'danger');
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showAlert("An unexpected error occurred during the upload.", "danger");
+            });
+        }
+    </script>
+</body>
+</html>

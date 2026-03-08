@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Cinzel:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Animated Particles */
+        .background-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(to top, silver, rgba(255, 215, 0, 0.5));
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: floatUp 6s linear infinite;
+        }
+
+        .particle:nth-child(1) { top: 80%; left: 0.75%; animation-duration: 5s; }
+        .particle:nth-child(2) { top: 60%; left: 50%; animation-duration: 7s; }
+        .particle:nth-child(3) { top: 90%; left: 80%; animation-duration: 4s; }
+        .particle:nth-child(4) { top: 70%; left: 2%; animation-duration: 6s; }
+        .particle:nth-child(5) { top: 80%; left: 1%; animation-duration: 9s; }
+        .particle:nth-child(6) { top: 70%; left: 90%; animation-duration: 4s; }
+        .particle:nth-child(7) { top: 80%; left: 98%; animation-duration: 5s; }
+        .particle:nth-child(8) { top: 85%; left: 2%; animation-duration: 8s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        /* Login Card Styling */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Silver Gradient Button */
+        .custom-btn {
+            background: linear-gradient(to right, silver, rgb(56, 53, 53));
+            color: black;
+            font-weight: bold;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .custom-btn:hover {
+            background: linear-gradient(to right, white, silver);
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .bg-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures the image covers the entire div */
+        opacity: 0.1; /* Adjust this value for more/less visibility */
+        }
+        
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(to left, gold, silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        a {
+    text-decoration: none;
+    text-align: center;
+    display: block; /* Makes it behave like a block element */
+    margin-top: 10px; /* Adjust spacing */
+    color: aliceblue;
+    transition: color 0.1s ease-in-out;
+    
+}
+a:hover{
+    color: gold;
+}
+
+
+
+    </style>
+</head>
+<body>
+
+     <!-- Animated Background Particles -->
+     <div class="background-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container-fluid vh-100 d-flex align-items-center justify-content-center text-white">
+        <div class="row w-75 shadow-lg rounded overflow-hidden">
+            
+            <!-- Left Side - Animaimage.pngtion & Info -->
+            <div class="col-md-6 bg-dark d-flex flex-column align-items-center justify-content-center text-center p-5 position-relative">
+                <img src="/static/image.png" alt="Background Image" class="bg-image">
+                <h1 class="display-4 fw-bold text-warning position-relative"><br>Welcome Back!</h1>
+                <p class="fs-5 position-relative"><br><br>Log in to manage  technical education resources</p>
+            </div>
+            
+
+            <!-- Right Side - Login Form -->
+            <div class="col-md-6 bg-secondary d-flex align-items-center justify-content-center p-5">
+                <div class="card bg-dark text-white w-100 p-4 border-warning">
+                    <div class="card-body">
+                        <h2 class="text-center text-warning mb-4">ADMIN's Hub</h2>
+                        <form action="/admin-login" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">User ID</label>
+                                <input  name="User" class="form-control bg-dark text-white border-warning" placeholder="Enter your email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="pass" class="form-control bg-dark text-white border-warning" placeholder="Enter your password">
+                            </div>
+                            <button type="submit" class="btn w-100 fw-bold custom-btn">Login</button>
+                        </form>
+                        <a href="{{ url_for('password_reset') }}">Forgot Login Credentials</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+ 
+    <!-- Footer -->
+    <footer class="text-center text-light py-3 bg-dark position-fixed bottom-0 w-100">
+        &copy; 2025 Your Technical Education Platform. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const particles = document.querySelectorAll(".particle");
+            particles.forEach(particle => {
+                particle.style.left = `${Math.random() * window.innerWidth}px`;
+            });
+        });
+    </script>
+
+</body>
+</html>

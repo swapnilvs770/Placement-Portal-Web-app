@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applicant List - HOD Portal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <style>
+        /* Global Design System Variables */
+        :root {
+            --primary-blue: #357ABD;
+            --light-blue: #EAF2FA;
+            --primary-white: #FFFFFF;
+            --background-grey: #F8F9FA;
+            --primary-text: #212529;
+            --secondary-text: #6C757D;
+            --border-color: #E9ECEF;
+            --success-green: #28A745;
+            --warning-red: #DC3545;
+        }
+
+        /* Base Typography & Layout */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-grey);
+            color: var(--primary-text);
+        }
+
+        h1, .h1 { font-size: 28px; font-weight: 600; }
+        h2, .h2 { font-size: 20px; font-weight: 500; }
+        
+        .sidebar {
+            width: 16rem;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--primary-white);
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+            z-index: 100;
+        }
+        .main-content {
+            margin-left: 16rem;
+            padding: 2rem;
+        }
+
+        /* Sidebar Components */
+        .sidebar-header {
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--secondary-text);
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .sidebar .nav-link:hover {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+        }
+        .sidebar .nav-link.active {
+            background-color: var(--primary-blue);
+            color: var(--primary-white);
+        }
+
+        /* Core Components */
+        .custom-card {
+            background-color: var(--primary-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Table Styling */
+        .table {
+            border-collapse: collapse;
+        }
+        .table thead {
+            background-color: var(--background-grey);
+        }
+        .table th {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--secondary-text);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .table-hover > tbody > tr:hover {
+            background-color: var(--light-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <aside class="sidebar d-flex flex-column">
+            <div class="sidebar-header">
+                <a href="{{ url_for('hod_dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+                    <i class="bi bi-shield-check fs-4" style="color: var(--primary-blue);"></i>
+                    <span class="fs-5 fw-bold" style="color: var(--primary-blue);">HOD Portal</span>
+                </a>
+            </div>
+            <nav class="nav flex-column nav-pills">
+                <a class="nav-link" href="{{ url_for('hod_dashboard') }}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+                <a class="nav-link" href="#"><i class="bi bi-people-fill"></i> Students</a>
+                <a class="nav-link active" href="{{ url_for('applicant_list') }}"><i class="bi bi-person-lines-fill"></i> Applicants</a>
+                <a class="nav-link" href="#"><i class="bi bi-building"></i> Companies</a>
+                <a class="nav-link" href="#"><i class="bi bi-bar-chart-line-fill"></i> Reports</a>
+            </nav>
+            <div class="mt-auto p-2">
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger w-100">Log Out</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="mb-4">
+                <h1 class="h1 mb-1">Applicant List</h1>
+                <p class="text-muted">Review and process student applications for placements.</p>
+            </header>
+
+            <div class="custom-card">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="py-3 px-4">Student Name</th>
+                                <th class="py-3 px-4">Roll No</th>
+                                <th class="py-3 px-4">Announcement ID</th>
+                                <th class="py-3 px-4">Placed Status</th>
+                                <th class="py-3 px-4">HOD Action</th>
+                                <th class="py-3 px-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for application in applicants %}
+                            <tr>
+                                <td class="px-4 fw-medium">{{ application.Student_Name }}</td>
+                                <td class="px-4 text-muted">{{ application.UserID }}</td>
+                                <td class="px-4 text-muted">{{ application.announcement_id }}</td>
+                                <td class="px-4 text-muted">
+                                    {% if application.is_placed %}Placed{% else %}Not Placed{% endif %}
+                                </td>
+                                <td class="px-4">
+                                    {% if application.hod_action == 'Accepted' %}
+                                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill">Accepted</span>
+                                    {% elif application.hod_action == 'Rejected' %}
+                                        <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Rejected</span>
+                                    {% else %}
+                                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4">
+                                    {% if application.hod_action != 'Accepted' and application.hod_action != 'Rejected' %}
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form method="POST">
+                                            <input type="hidden" name="application_id" value="{{ application.id }}">
+                                            <input type="hidden" name="action" value="accept">
+                                            <button type="submit" class="btn btn-sm text-white" style="background-color: var(--primary-blue);">Accept</button>
+                                        </form>
+                                        <form method="POST" class="d-flex align-items-center gap-2">
+                                            <input type="hidden" name="application_id" value="{{ application.id }}">
+                                            <input type="hidden" name="action" value="reject">
+                                            <input type="text" name="rejection_reason" class="form-control form-control-sm" placeholder="Reason" style="width: 120px;" required>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Reject</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted p-5">No pending applications found for your department.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if total_pages > 1 %}
+                <div class="p-3 d-flex justify-content-between align-items-center border-top">
+                    <span class="text-muted small">
+                        Showing {{ (page - 1) * 10 + 1 }} to {{ (page - 1) * 10 + applicants|length }} of {{ total_applicants }} results
+                    </span>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                                <a class="page-link" href="{{ url_for('applicant_list', page=page-1) }}">Previous</a>
+                            </li>
+                            {% for p in range(1, total_pages + 1) %}
+                            <li class="page-item {% if p == page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('applicant_list', page=p) }}">{{ p }}</a>
+                            </li>
+                            {% endfor %}
+                            <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+                                <a class="page-link" href="{{ url_for('applicant_list', page=page+1) }}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        Swal.fire({
+                            icon: '{{ "success" if category == "success" else "warning" if category == "warning" else "error" }}',
+                            title: '{{ category|capitalize }}',
+                            text: '{{ message }}',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        });
+    </script>
+</body>
+</html>
