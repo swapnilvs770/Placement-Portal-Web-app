@@ -1,0 +1,8 @@
+Flask
+pymysql
+python-dotenv
+cryptography
+PyJWT
+pandas
+openpyxl
+gunicorn
